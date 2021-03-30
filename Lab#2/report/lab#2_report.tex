@@ -1,0 +1,300 @@
+\documentclass[a4paper, 12pt]{article}
+
+%Ukrainian language
+
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,ukrainian]{babel}
+\usepackage{indentfirst}
+
+%Verbatim
+\usepackage{fancyvrb}
+
+%Math
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} 
+
+% Images
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+%Vector graphics
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+
+%Plots
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+%Title
+\author{Демедюк Віталій}
+\title{Чисельні методи\\
+	   Лабораторна робота №2\\
+	   Варіант №5}
+\date{\today}
+
+%Text color
+\usepackage{xcolor}
+
+%Multirow
+\usepackage{multirow}
+
+\usepackage{float}
+
+\usepackage{bigstrut}
+\usepackage{colortbl}
+
+\usepackage[pdftex,
+colorlinks,%
+linkcolor=blue,citecolor=red,urlcolor=blue,
+hyperindex,%
+plainpages=false,%
+bookmarksopen,%
+bookmarksnumbered,%
+unicode]{hyperref}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+
+%TASK #1-----------------------------------------------------
+\newpage
+\section{Задача №1}
+
+\subsection{Умова}
+
+Методом Гаусса розв’язати систему рівнянь.
+
+\[
+\begin{pmatrix}
+5 & 2 & 1 & 0\\
+1 & 3 & 2 & 8\\
+4 & -6 & 1 & 0\\
+5 & 0 & 3 & 2
+\end{pmatrix}
+\begin{pmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4
+\end{pmatrix}
+=
+\begin{pmatrix}
+14\\
+65\\
+-3\\
+32
+\end{pmatrix}
+\]
+
+\subsection{Теоретичні відомості}
+
+Розглянемо задачу:
+
+\[ Ax = b \]
+
+де $A$ - матриця з розмірності $n \times n$, $\vec{x} = (x_1, x_2, ..., x_n)^T$ -- шуканий вектор, $\vec{b} = (b_1, b_2, ..., b_n)^T$ -- заданий вектор правих частин. Припустимо, що $detA \neq 0$, тобто існує єдиний розв'язок.
+
+Запишемо рівняння у вигляді
+
+\[\begin{cases}
+a_{11}x_1 + a_{12}x_2 + ... + a_{1n}x_n = b_1\\
+a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n = b_2\\
+..................................................\\
+a_{n1}x_1 + a_{n2}x_2 + ... + a_{nn}x_n = b_n\\
+\end{cases}\]
+
+Перший крок методу Гаусса (його ще називають матодом виключення невідомих) полягає у виключені невідомого $x_1$ з усіх рівнянь починаючи з другого, тобто в переході до системи 
+
+\[\begin{cases}
+x_1 + a_{12}^{(1)}x_2 + ... + a_{1n}^{(1)}x_n = b_1^{(1)}\\
+ \hspace{0.9cm} a_{22}^{(1)}x_2 + ... + a_{2n}^{(1)}x_n = b_2^{(1)}\\
+................................................\\
+ \hspace{0.9cm} a_{n2}^{(1)}x_2 + ... + a_{nn}^{(1)}x_n = b_n^{(1)}\\
+\end{cases}\]
+
+Продовжуючи цей процес виключення, отримаємо СЛАР з верхньотрикутною матрицею вигляду
+
+\[\begin{cases}
+x_1 + a_{12}^{(1)}x_2 + ... + a_{1n}^{(1)}x_n = b_1^{(1)}\\
+ \hspace{1.55cm} x_2 + ... + a_{2n}^{(2)}x_n = b_2^{(2)}\\
+................................................\\
+ \hspace{3.95cm} x_n = b_n^{(n)}
+\end{cases}\]
+
+Коефіціенти системи обчислюють за формулами
+
+\[ 
+a_{kj}^{(k)} = \frac{a_{kj}^{(k-1)}}{a_{kk}^{(k-1)}}, b_{k}^{(k)} = \frac{b_{k}^{(k-1)}}{a_{kk}^{(k-1)}}, k = \overline{1, n}, j = \overline{k+1, n};
+\]
+
+\[
+a_{ij}^{(k)} = a_{ij}^{(k-1)} - a_{ik}^{(k-1)}a_{kj}^{(k)}, b_{i}^{(k)} = b_{i}^{(k-1)} - a_{ik}^{(k-1)}b_{k}^{(k)}, k = \overline{1, n-1}, i = \overline{k+1, n}, j = \overline{k+1, n}.
+\]
+
+за умови $a_{kk}^{(k-1)} \neq 0$.
+
+СЛАР з верхньотрикутною матрицею можна розв'язати за формулами
+
+\[
+x_n = b_{n}^{(n)}, x_i = b_{i}^{(i)} - \sum_{j = i+1}^{n}a_{ij}^{(i)}x_j, i = \overline{n-1, 1}
+\]
+
+\subsection{Необхідні обчислення}
+
+\[
+detA = 
+\begin{vmatrix}
+5 & 2 & 1 & 0\\
+1 & 3 & 2 & 8\\
+4 & -6 & 1 & 0\\
+5 & 0 & 3 & 2
+\end{vmatrix}
+= -450
+\]
+
+$det A \neq 0$, отже система має єдиний розв'язок.
+
+\subsection{Результат роботи програми}
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Gaussian elimination
+5x_1 + 2x_2 + x_3 = 14
+1x_1 + 3x_2 + 2x_3 + 8x_4 = 65
+4x_1 - 6x_2 + x_3 = -3
+5x_1 + 3x_3 + 2x_4 = 32
+Result:
+x_1 = 1 , x_2 = 2 , x_3 = 5 , x_4 = 6.
+\end{Verbatim}
+
+%TASK #2-----------------------------------------------------
+\newpage
+\section{Задача №2}
+
+\subsection{Умова}
+
+Методом прогонки розв’язати систему рівнянь.
+
+\[
+\begin{pmatrix}
+2 & 4 & 0\\
+4 & 1 & 5\\
+0 & 5 & 2
+\end{pmatrix}
+\begin{pmatrix}
+x_1\\
+x_2\\
+x_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+20\\
+37\\
+30
+\end{pmatrix}
+\]
+
+\subsection{Теоретичні відомості}
+
+Метод прогонки дозволяє розв'язувати СЛАР з тридіагональною матрицею. Система має такий вигляд
+
+\[
+\begin{cases}
+b_1x_1 + c_1x_2 = d_1 \\
+a_ix_{i-1} + b_ix_i + c_ix_{i+1} = d_i, i = \overline{2, n-1} \\
+a_nx_{n-1} + b_nx_n = d_n
+\end{cases}
+\]
+
+У матричному вигляді система має такий вигляд:
+
+\[
+\begin{pmatrix}
+b_1 & c_1 & 0 & 0 & ....... & 0 & 0 & 0 \\
+a_2 & b_2 & c_2 & 0 & ....... & 0 & 0 & 0 \\
+0 & a_2 & b_2 & c_2 & ....... & 0 & 0 & 0 \\
+. & . & . & . & ....... & . & . & .\\
+0 & 0 & 0 & 0 & ....... & a_{n-1} & b_{n-1} & c_{n-1}  \\
+0 & 0 & 0 & 0 & ....... & 0 & a_{n} & b_{n}
+\end{pmatrix}
+\begin{pmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+... \\
+x_{n-1} \\
+x_n \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+d_1 \\
+d_2 \\
+d_3 \\
+... \\
+d_{n-1} \\
+d_n \\
+\end{pmatrix}
+\]
+
+Розв'язок проводиться в два кроки, як і в методі Гауса, прямому, та зворотному. В прямому ході ми обчислюємо:
+
+\[
+c_i^\prime = 
+\begin{dcases}
+\frac{c_i}{b_i}; i = 1\\
+\frac{c_i}{b_i-a_ic_{i-1}^\prime}; i = \overline{2,n-1}
+\end{dcases}
+\]
+
+\[
+d_i^\prime = 
+\begin{dcases}
+\frac{d_i}{b_i}; i = 1\\
+\frac{d_i-a_id_{i-1}^\prime}{b_i-a_ic_{i-1}^\prime}; i = \overline{2,n-1}
+\end{dcases}
+\]
+
+\newpage
+Тепер розв'язок знаходимо зворотнім ходом:
+
+\[
+x_n = d_n^\prime
+\]
+
+\[
+x_i = \frac{d_i - c_ix_{i+1}}{b_i}
+\]
+
+\subsection{Необхідні обчислення}
+
+\[
+detA = 
+\begin{vmatrix}
+2 & 4 & 0\\
+4 & 1 & 5\\
+0 & 5 & 2
+\end{vmatrix}
+= -78
+\]
+
+$det A \neq 0$, отже система має єдиний розв'язок.
+
+\subsection{Результат роботи програми}
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Tridiagonal matrix algorithm
+2x_1 + 4x_2 = 18
+4x_1 + x_2 + 5x_3 = 33
+5x_2 + 2x_3 = 30
+Result:
+x_1 = 1 , x_2 = 4 , x_3 = 5.
+\end{Verbatim}
+
+\end{document}
