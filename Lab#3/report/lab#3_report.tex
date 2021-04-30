@@ -1,0 +1,226 @@
+\documentclass[a4paper, 12pt]{article}
+
+%Ukrainian language
+
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,ukrainian]{babel}
+\usepackage{indentfirst}
+
+%Verbatim
+\usepackage{fancyvrb}
+
+%Math
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} 
+
+% Images
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+%Vector graphics
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{patterns}
+
+%Plots
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+%Title
+\author{Демедюк Віталій}
+\title{Чисельні методи\\
+	   Лабораторна робота №3\\
+	   Варіант №5}
+\date{\today}
+
+%Text color
+\usepackage{xcolor}
+
+%Multirow
+\usepackage{multirow}
+
+\usepackage{float}
+
+\usepackage{bigstrut}
+\usepackage{colortbl}
+
+\usepackage[pdftex,
+colorlinks,%
+linkcolor=blue,citecolor=red,urlcolor=blue,
+hyperindex,%
+plainpages=false,%
+bookmarksopen,%
+bookmarksnumbered,%
+unicode]{hyperref}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+
+%TASK #1-----------------------------------------------------
+\newpage
+\section{Задача №1}
+
+\subsection{Умова}
+
+Методом Якобі розв’язати систему рівнянь.
+
+\[
+\begin{pmatrix}
+4 & 0 & 1 & 1 \\
+0 & 3 & 0 & 1 \\
+1 & 0 & 2 & 0 \\
+1 & 1 & 0 & 5
+\end{pmatrix}
+\begin{pmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+x_4 
+\end{pmatrix}
+=
+\begin{pmatrix}
+11 \\
+10 \\
+7 \\
+23 
+\end{pmatrix}
+\]
+
+\subsection{Теоретичні відомості}
+
+Припустімо, що діагональні коефіціенти невиродженої матриці $A$ ненульові $(a_{ii} \neq 0)$. Якщо деякі $a_{ii} = 0$, то цього можна досягти, переставивши деякі  рядки чи стовпці матриці. розділивши \textit{і-те} рівняння на $a_{ii}$, отримаємо таку СЛАР:
+
+\[
+x_i = - \sum_{j=1}^{i-1} \frac{a_{ij}}{a_{ii}}x_j - \sum_{j=i+1}^{n} \frac{a_{ij}}{a_{ii}}x_j + \frac{b_i}{a_{ii}}, i = \overline{1, n}.
+\]
+
+Задамо якесь початкове наближення $\overline{x}^0 = (x_{1}^{0},...,x_{n}^{0})$. Наступні наближення обчислимо за формулами:
+
+\[
+x_{i}^{k+1} = - \sum_{j=1}^{i-1} \frac{a_{ij}}{a_{ii}}x_j^k - \sum_{j=i+1}^{n} \frac{a_{ij}}{a_{ii}}x_j^k + \frac{b_i}{a_{ii}}, i = \overline{1, n}, k = 0, 1, ...
+\]
+
+Метод збігається, тобто $\lim\limits_{\substack{k \to \infty}} \Vert \overline{x}^k - \overline{x}\Vert = 0$, якщо виконуються умови діагональної переваги матриці $A$:  $|a_{ii}| \geqslant \sum\limits_{\substack{j = 1 \\ j \neq i}}^{n}|a_{ij}|, i = \overline{1, n}$. Якщо ж виконуються нерівності $q|a_{ii}| \geqslant \sum\limits_{\substack{j = 1 \\ j \neq i}}^{n}|a_{ij}|, i = \overline{1, n}, q < 1$, то правдива така оцінка точності:
+
+\[
+\Vert \overline{x}^k - \overline{x}\Vert \leqslant \frac{q^k}{1-q}\Vert \overline{x}^0 - \overline{x}^11\Vert
+\]
+
+Ітерації виконують, поки не буде отримано потрібну кількість цифр в компонентах розв'язку чи до виконання умови $\frac{q^k}{1-q} < \varepsilon$
+
+Вибір останньої умови пояснюється тим, що в разі її виконання для $\overline{x}^0 = 0$ моємо оцінку
+
+\[
+\delta(\overline{x}) \leqslant \frac{\Vert\overline{x}^k - \overline{x}\Vert}{\Vert\overline{x}\Vert}  \leqslant \frac{q^k}{1-q} < \varepsilon
+\]
+
+\subsection{Необхідні обчислення}
+
+Перевіряємо, чи виконується умова діагональної переваги нашої матриці.
+
+\[ a_{11} \geqslant a_{12} + a_{13} + a_{14}\]
+\[ 4 \geqslant 2 = 0 + 1 + 1\]
+\[ a_{22} \geqslant a_{21} + a_{23} + a_{24}\]
+\[ 3 \geqslant 1 = 0 + 0 + 1\]
+\[ a_{33} \geqslant a_{31} + a_{32} + a_{34}\]
+\[ 2 \geqslant 1 = 1 + 0 + 0\]
+\[ a_{44} \geqslant a_{41} + a_{42} + a_{43}\]
+\[ 5 \geqslant 2 = 1 + 1 + 0\]
+
+Умова виконується!
+
+\subsection{Результат роботи програми}
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Jacobi method
+4x_1 + x_3 + x_4 = 11
+3x_2 + x_4 = 10
+1x_1 + 2x_3 = 7
+1x_1 + x_2 + 5x_4 = 23
+Result:
+x_1 = 1 , x_2 = 2 , x_3 = 3 , x_4 = 4.
+\end{Verbatim}
+
+
+%TASK #2-----------------------------------------------------
+\newpage
+\section{Задача №2}
+
+Методом Зейделя розв’язати систему рівнянь.
+
+\subsection{Умова}
+
+\[
+\begin{pmatrix}
+3 & 0 & 0 & 1 \\
+0 & 6 & 2 & 0 \\
+0 & 2 & 3 & 0 \\
+1 & 0 & 0 & 4
+\end{pmatrix}
+\begin{pmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+x_4 
+\end{pmatrix}
+=
+\begin{pmatrix}
+7 \\
+18 \\
+13 \\
+17 
+\end{pmatrix}
+\]
+
+\subsection{Теоретичні відомості}
+
+Якщо в формулі методу Якобі обчислення наступного приближення використати вже відомі нові значення $x_j^{k+1}$, $j=\overline{1, i-1}$, то отримаємо формулу
+
+\[
+x_{i}^{k+1} = - \sum_{j=1}^{i-1} \frac{a_{ij}}{a_{ii}}x_j^{k+1} - \sum_{j=i+1}^{n} \frac{a_{ij}}{a_{ii}}x_j^k + \frac{b_i}{a_{ii}}, i = \overline{1, n}, k = 0, 1, ...
+\]
+
+Достатні умови збіжностім методу Зеделя такі самі, як і для методу Якобі. Крім того, метод Зейделя збігається, якщо $A^T = A \geq 0$. Умова невід'ємності симетричної матриці $A$ означає, що невід'ємні її голові мінори.
+
+Замінивши порядок обчислення компонент, отримаємо ще одну формулу методу Зейделя:
+
+\[
+x_{i}^{k+1} = - \sum_{j=1}^{i-1} \frac{a_{ij}}{a_{ii}}x_j^{k} - \sum_{j=i+1}^{n} \frac{a_{ij}}{a_{ii}}x_j^{k+1} + \frac{b_i}{a_{ii}}, i = \overline{1, n}, k = 0, 1, ...
+\]
+
+\subsection{Необхідні обчислення}
+
+Перевіряємо, чи виконується умова діагональної переваги нашої матриці.
+
+\[ a_{11} \geqslant a_{12} + a_{13} + a_{14}\]
+\[ 3 \geqslant 1 = 0 + 0+ 1\]
+\[ a_{22} \geqslant a_{21} + a_{23} + a_{24}\]
+\[ 6 \geqslant 2 = 0 + 2 + 1\]
+\[ a_{33} \geqslant a_{31} + a_{32} + a_{34}\]
+\[ 3 \geqslant 2 = 0 + 2 + 0\]
+\[ a_{44} \geqslant a_{41} + a_{42} + a_{43}\]
+\[ 4 \geqslant 1 = 1 + 0 + 0\]
+
+Умова виконується!
+
+\subsection{Результат роботи програми}
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Seidel method
+3x_1 + x_4 = 7
+6x_2 + 2x_3 = 18
+2x_2 + 3x_3 = 13
+1x_1 + 4x_4 = 17
+Result:
+x_1 = 1 , x_2 = 2 , x_3 = 3 , x_4 = 4.
+\end{Verbatim}
+
+\end{document}

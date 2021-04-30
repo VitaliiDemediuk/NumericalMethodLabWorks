@@ -3,4 +3,4 @@ project(lab3_code)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(lab3_code main.cpp)
+add_executable(lab3_code main.cpp linear_equation_system.cpp linear_equation_system.h)
