@@ -11,7 +11,7 @@
 \usepackage{fancyvrb}
 
 %Math
-\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} 
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
 
 % Images
 \usepackage{graphicx}
@@ -53,6 +53,9 @@ bookmarksopen,%
 bookmarksnumbered,%
 unicode]{hyperref}
 
+% For || ||
+\usepackage{physics}
+
 \begin{document}
 
 \maketitle
@@ -66,11 +69,53 @@ unicode]{hyperref}
 
 \subsection{Умова}
 
+Формулою трапецій знайти інтеграл з точністю $0.001$:
+
+\[ \int_{0}^{2.5}(x^4+2x^2+x)\,dx\]
+
 \subsection{Теоретичні відомості}
+
+Якщо у квадратурній формулі замкненого типу взяти $n = 1$, то отримаємо формулу трапеції.
+
+\[ \int_{a}^{b}f(x)\,dx \approx \frac{f(a)+f(b)}{2}(b-a), \]
+
+з оцінкою залишкового члена:
+
+\[ |R(f)| \leq \frac{M_2(b-a)^3}{12} \]
+
+Тоді складена формула з оцінкою залишкового члена:
+
+\[ \int_{a}^{b}f(x)\,dx \approx h(\frac{f(x_0)}{2} + f(x_1) + \cdots + f(x_{n-1}) + \frac{f(x_n)}{2}))), \]
+
+\[ |R(f)| \leq \frac{M_2(b-a)h^2}{12} \]
+
+Алгебраїчний степінь точності квадратурної формули дорівнює 1. \\ Порядок точності складеної формули трапеції -- 2, а на одному проміжку -- 3.
 
 \subsection{Необхідні обчислення}
 
+\[ \varepsilon = 0.001 \]
+
+\[ f(x) = x^4+2x^2+x \]
+
+\[ f''(x) = 12x^2 + 4\ \]
+
+\[ M_2 = \max_{x \in [0; 2.5]}|12*x^2 + 4| = 79\]
+
+\[ h \leq \sqrt{\frac{12\varepsilon}{M_2(b-a)}} = \sqrt{\frac{12 \cdot 0.001}{79 \cdot 2.5}} \approx 0.00779 \text{ -- оцінка кроку}\]
+
+\[ \left \lceil \frac{b-a}{h} \right \rceil = \left \lceil \frac{2.5}{0.0779} \right \rceil = 321 = n \text{ -- кількість інтервалів} \]
+
+Візьмемо із запасом $n = 50$.
+
 \subsection{Результат роботи програми}
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Trapezoidal rule:
+Integral of x^4 + 2*x^2 + x from 0 to 2.5 equal 33.0733
+\end{Verbatim}
+
 
 %TASK #2-----------------------------------------------------
 \newpage
@@ -78,11 +123,68 @@ unicode]{hyperref}
 
 \subsection{Умова}
 
+Методом простої ітерації розв'язати систему рівнянь:
+
+\[
+\begin{cases}
+\sin(x) + 2y = 1.6, \\
+\cos(y-1) = 1;
+\end{cases}
+\]
+
 \subsection{Теоретичні відомості}
+
+\textbf{Метод Ньютона.}
+
+Ліанерізуючи рівняння $\overline{F}(\overline{x})=0$ в околі наближення до розв'язку $\overline{x}$, отримаємо систему лінійних рівнянь відносно нового наближення $\overline{x}^{k+1}$:
+
+\[
+\overline{F}\left(\overline{x}^{k}\right)+\overline{F'}\left(\overline{x}^{k}\right)\left(\overline{{x}}^{k+1}-\overline{{x}}^{k}\right) = \overline{0}.
+\]
+
+Алгоритм розв'язання рівняння:
+
+1) задаємо початкове наближення $\overline{x}^0$;
+
+2) обчислимо матрицю Якобі $A_{k}\overline{z}^k = \left(\frac{\partial f_i}{\partial x_i}(\overline{x}^k)\right)_{i,j=1}^{n}$;
+
+3) розв'язати СЛАР $A_{k}\overline{z}^k = \overline{F}\left(\overline{x}^{k}\right)$;
+
+4) обчислити нове наближення $\overline{x}^{k+1} = \overline{x}^{k} - \overline{z}^{k}$;
+
+5) перевірити умову $||\overline{z}^k|| < \varepsilon$; якщо її виконано, припинити процес, а ні, то повторити обчислення, починаючи з п.2).
+
+
 
 \subsection{Необхідні обчислення}
 
-\subsection{Результат роботи програми}
+\[
+\overline{F}(\overline{x}) = 
+\begin{pmatrix}
+	\sin(x) + 2y - 1.6 \\
+	\cos(y-1) - 1
+\end{pmatrix}
+\]
+
+\[
+A_k = 
+\begin{pmatrix}
+	\cos(x) && 2 \\
+	0 && -sin(y-1)
+\end{pmatrix}
+\]
+
+\[
+\overline{x}^0 = (1, 0)
+\]
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Solve equation system {sin(x) + 2*y - 1.6 = 0, cos(y - 1) - 1 = 0}
+x = -0.411516
+y = 1
+\end{Verbatim}
 
 %TASK #3-----------------------------------------------------
 \newpage
@@ -90,10 +192,43 @@ unicode]{hyperref}
 
 \subsection{Умова}
 
+Степеневим методом із точністю $10^{-3}$ знайти максимальні власні значення матриці:
+
+\[
+A = 
+\begin{pmatrix}
+1 & 2 & 3 \\
+2 & 3 & 4 \\
+3 & 4 & 5
+\end{pmatrix}
+\]
+
 \subsection{Теоретичні відомості}
+
+Алгоритм відшукання $\lambda_1$ -- найбільшого власного значення, $\overline{x}_1$ степеневим методом за формолою скалярних добутків із нормуванням $\overline{x}^n$ має такий вигляд:
+
+1) задати $\overline{x}^0$;
+
+2) для $k = 0, 1 \cdots$ обчислити $\overline{e}^k = \frac{\overline{x}^k}{\norm{\overline{x}^k}}, \overline{x}^{k+1} = A \overline{e}^k, \\ \mu_k = \left( \overline{x}^{k+1}, \overline{e}^k \right)$
+
+3) продовжити процес до виконання умови $|\mu_{N} - \mu_{N-1}| < \varepsilon$, де $\varepsilon$ -- задана точність.
+
+Тоді $\lambda_1 \approx \mu_N, \overline{x}_1 \approx \overline{e}^N$.
 
 \subsection{Необхідні обчислення}
 
+$\overline{x}^0 = (0, 0, 0)$
+
 \subsection{Результат роботи програми}
+
+Вивід програми:
+
+\begin{Verbatim}[numbers=left,xleftmargin=20mm]
+Maximal eigenvalues:
+1 2 3 
+2 3 4 
+3 4 5 
+Maximal eigenvalues equal 9.62348
+\end{Verbatim}
 
 \end{document}

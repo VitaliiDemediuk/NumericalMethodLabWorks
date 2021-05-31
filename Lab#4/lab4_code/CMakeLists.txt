@@ -3,4 +3,4 @@ project(lab4_code)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(lab4_code main.cpp)
+add_executable(lab4_code main.cpp mathlib.cpp mathlib.h)
